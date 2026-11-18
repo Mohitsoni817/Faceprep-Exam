@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Catalogue</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+        }
+
+        .container {
+            width: 650px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        input, select {
+            padding: 10px;
+            flex: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #f8f8f8;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .card h3 {
+            margin: 5px 0;
+        }
+
+        .category {
+            color: gray;
+            font-size: 14px;
+        }
+
+        .price {
+            font-weight: bold;
+        }
+
+        @media(max-width: 600px) {
+            .container {
+                width: 90%;
+                box-sizing: border-box;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Product Catalogue</h1>
+
+    <div class="filters">
+        <input type="text" id="search"
+               placeholder="Search by name...">
+
+        <select id="category">
+            <option value="All">All categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Fashion">Fashion</option>
+        </select>
+    </div>
+
+    <p id="count"></p>
+
+    <div class="grid" id="products"></div>
+
+</div>
+
+<script>
+
+    let productList = [
+        {
+            name: "Wireless Mouse",
+            category: "Electronics",
+            price: 799
+        },
+        {
+            name: "Bluetooth Speaker",
+            category: "Electronics",
+            price: 1999
+        },
+        {
+            name: "USB Cable",
+            category: "Electronics",
+            price: 199
+        },
+        {
+            name: "Notebook Pack",
+            category: "Stationery",
+            price: 249
+        },
+        {
+            name: "Gel Pen Set",
+            category: "Stationery",
+            price: 99
+        },
+        {
+            name: "Running Shoes",
+            category: "Fashion",
+            price: 2499
+        },
+        {
+            name: "Cotton T-Shirt",
+            category: "Fashion",
+            price: 599
+        },
+        {
+            name: "Backpack",
+            category: "Fashion",
+            price: 1299
+        }
+    ];
+
+    function displayProducts() {
+
+        let searchText = document.getElementById("search")
+            .value.toLowerCase();
+
+        let selectedCategory =
+            document.getElementById("category").value;
+
+        let filtered = productList.filter(product => {
+
+            let matchName = product.name.toLowerCase()
+                .includes(searchText);
+
+            let matchCategory =
+                selectedCategory === "All" ||
+                product.category === selectedCategory;
+
+            return matchName && matchCategory;
+        });
+
+        let output = document.getElementById("products");
+
+        output.innerHTML = "";
+
+        document.getElementById("count").textContent =
+            "Showing " + filtered.length +
+            " of " + productList.length + " products";
+
+        if (filtered.length === 0) {
+            output.textContent = "No products found.";
+            return;
+        }
+
+        filtered.forEach(product => {
+
+            let card = document.createElement("div");
+
+            card.className = "card";
+
+            card.innerHTML = `
+                <h3>${product.name}</h3>
+                <p class="category">${product.category}</p>
+                <p class="price">Rs. ${product.price}</p>
+            `;
+
+            output.appendChild(card);
+        });
+    }
+
+    document.getElementById("search")
+        .addEventListener("input", displayProducts);
+
+    document.getElementById("category")
+        .addEventListener("change", displayProducts);
+
+    displayProducts();
+
+</script>
+
+</body>
+</html>
